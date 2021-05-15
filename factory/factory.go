@@ -1,10 +1,13 @@
 package factory
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"github.com/rkiminius/carbon-based-life-forms/mineral"
+	"github.com/rkiminius/carbon-based-life-forms/rabbit"
 	"github.com/rkiminius/carbon-based-life-forms/task"
+	"log"
 )
 
 func PerformActions(taskRequest task.Task) {
@@ -49,6 +52,13 @@ func condense(m mineral.Mineral) (mineral.Mineral, error) {
 }
 
 func informManager(taskRequest task.Task) {
-	fmt.Printf("Action %s done!\n", taskRequest.ActionType)
-	// TODO Send message to manager
+	sm := rabbit.SimpleMessage{
+		fmt.Sprintf("Action %s done!\n", taskRequest.ActionType),
+	}
+	b, err := json.Marshal(&sm)
+	if err != nil {
+		log.Fatal(err)
+	}
+	//helper.FailOnError(err, err.Error())
+	conn.Publish("manager-queue", b)
 }

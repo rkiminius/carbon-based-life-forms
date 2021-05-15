@@ -28,7 +28,7 @@ func SendTaskToFactory(factoryTask task.Task) error {
 	if err != nil {
 		return err
 	}
-	conn.Publish("manager-factory-queue", b)
+	conn.Publish("factory-queue", b)
 	return nil
 }
 

@@ -41,12 +41,3 @@ func FindMineralById(mineralId int) (*Mineral, error) {
 	}
 	return nil, errors.New("mineral not available")
 }
-
-func IsActionTypeValid(actionType string) bool {
-	if actionType == MINERAL_ACTION_TYPE_CONDENSE ||
-		actionType == MINERAL_ACTION_TYPE_FRACTURE ||
-		actionType == MINERAL_ACTION_TYPE_MELT {
-		return true
-	}
-	return false
-}

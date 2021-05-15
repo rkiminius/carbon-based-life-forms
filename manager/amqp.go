@@ -16,10 +16,10 @@ func InitAmqp() {
 		panic(err)
 	}
 
-	conn.StartConsumer("client-manager-queue", handlerFunc)
+	conn.StartConsumer("manager-queue", handleFromClient)
 }
 
-func handlerFunc(body []byte) {
+func handleFromClient(body []byte) {
 	var message rabbit.Message
 	_ = json.Unmarshal(body, &message)
 	switch message.Type {

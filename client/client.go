@@ -63,6 +63,6 @@ func PerformActionsOnMinerals(cr ClientRequest) error {
 		return err
 	}
 
-	conn.Publish("client-manager-queue", bytes)
+	conn.Publish("manager-queue", bytes)
 	return nil
 }

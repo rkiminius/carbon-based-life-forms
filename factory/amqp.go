@@ -7,13 +7,16 @@ import (
 	"log"
 )
 
+var conn rabbit.Conn
+
 func InitAmqp() {
-	conn, err := rabbit.GetConn(rabbit.RABBIRT_URL)
+	var err error
+	conn, err = rabbit.GetConn(rabbit.RABBIRT_URL)
 	if err != nil {
 		panic(err)
 	}
 
-	conn.StartConsumer("manager-factory-queue", handlerFunc)
+	conn.StartConsumer("factory-queue", handlerFunc)
 }
 
 func handlerFunc(body []byte) {
