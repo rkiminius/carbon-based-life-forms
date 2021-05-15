@@ -7,6 +7,5 @@ import (
 
 func main() {
 	log.Println("Factory starting")
-	//factory.Consumer()
 	factory.InitAmqp()
 }

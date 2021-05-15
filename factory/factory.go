@@ -8,6 +8,7 @@ import (
 	"github.com/rkiminius/carbon-based-life-forms/rabbit"
 	"github.com/rkiminius/carbon-based-life-forms/task"
 	"log"
+	"time"
 )
 
 func PerformActions(taskRequest task.Task) {
@@ -31,7 +32,19 @@ func PerformActions(taskRequest task.Task) {
 
 // this action would split the Mineral in half, doubling its current amount of fractures
 func fracture(m mineral.Mineral) (mineral.Mineral, error) {
-	m.Fractures = m.Fractures * 2
+	timeToProcess := 10 * time.Second
+	mt, err := mineral.FindMineralTypeByName(m.Name)
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+
+	fractures := m.Fractures * 2
+	if fractures > mt.FractureLimit {
+		log.Fatal("Reached limit of fractures")
+	}
+
+	time.Sleep(timeToProcess)
+	m.Fractures = fractures
 	return m, nil
 }
 

@@ -1,6 +1,9 @@
 package mineral
 
-import "errors"
+import (
+	"errors"
+	"log"
+)
 
 // State of Mineral
 const MINERAL_STATE_SOLID = "SOLID"         // Mineral that is in its regular state and does not posses fractures
@@ -25,7 +28,7 @@ var minerals = []Mineral{
 		2,
 		"diamond",
 		MINERAL_STATE_SOLID,
-		100,
+		4,
 	},
 }
 
@@ -40,4 +43,14 @@ func FindMineralById(mineralId int) (*Mineral, error) {
 		}
 	}
 	return nil, errors.New("mineral not available")
+}
+
+func UpdateMineral(mineral Mineral) {
+	m, err := FindMineralById(mineral.ID)
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+	m.State = mineral.State
+	m.Fractures = mineral.Fractures
+	m.Name = mineral.Name
 }
