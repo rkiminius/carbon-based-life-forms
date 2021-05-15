@@ -1,40 +1,37 @@
 package manager
 
+import (
+	"encoding/json"
+	"github.com/rkiminius/carbon-based-life-forms/mineral"
+	"github.com/rkiminius/carbon-based-life-forms/rabbit"
+	"github.com/rkiminius/carbon-based-life-forms/task"
+)
+
 type Manager struct {
-	Name 	string
+	Name string
 }
 
-func (m Manager) GetAvailableMinerals () ([]Mineral, error) {
-
-	minerals := []Mineral{
-		{
-			"topaz",
-			MINERAL_STATE_LIQUID,
-			10,
-		},
-		{
-			"diamond",
-			MINERAL_STATE_SOLID,
-			100,
-		},
-	}
-
-	return minerals, nil
-}
-
-//func (m Manager) ReceiveAction (mineral Mineral, Action) error {
-//
-//	return nil
-//}
-
-func (m Manager) PerformActions ([]Mineral) error {
-
+func (m Manager) PerformActions(minerals []mineral.Mineral) error {
 	return nil
 }
 
 // Manager must be able to send a task request to the Factory
-func (m Manager) SendTaskToFactory () error {
-	var factory Factory
+func SendTaskToFactory(factoryTask task.Task) error {
+	//factory.PerformActions(factoryTask)
 
+	msg := rabbit.Message{
+		"ACTION",
+		factoryTask,
+	}
+
+	b, err := json.Marshal(&msg)
+	if err != nil {
+		return err
+	}
+	conn.Publish("manager-factory-queue", b)
 	return nil
+}
+
+func GetAvailableMinerals() ([]mineral.Mineral, error) {
+	return mineral.GetMinerals(), nil
 }

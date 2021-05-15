@@ -2,32 +2,51 @@ package mineral
 
 import "errors"
 
-const MINERAL_STATE_SOLID = "SOLID" // Mineral that is in its regular state and does not posses fractures
-const MINERAL_STATE_LIQUID = "LIQUID" // Mineral that has been melted. Such Mineral can't posses fractures
+// State of Mineral
+const MINERAL_STATE_SOLID = "SOLID"         // Mineral that is in its regular state and does not posses fractures
+const MINERAL_STATE_LIQUID = "LIQUID"       // Mineral that has been melted. Such Mineral can't posses fractures
 const MINERAL_STATE_FRACTURED = "FRACTURED" // Mineral that is in Solid state, but possesses fractures
 
 type Mineral struct {
-	Name 		string
-	State 		string
-	Fractures 	int
+	ID        int
+	Name      string
+	State     string
+	Fractures int
 }
 
-// this action would split the Mineral in half, doubling its current amount of fractures
-func (m *Mineral) Fracture () error {
-	return nil
+var minerals = []Mineral{
+	{
+		1,
+		"topaz",
+		MINERAL_STATE_LIQUID,
+		10,
+	},
+	{
+		2,
+		"diamond",
+		MINERAL_STATE_SOLID,
+		100,
+	},
 }
 
-// this action would attempt to melt a Mineral and turn it to Liquid state
-func (m *Mineral) Melt () error {
-	if m.State == MINERAL_STATE_LIQUID {
-		return errors.New("Mineral state already in liquid stage")
+func GetMinerals() []Mineral {
+	return minerals
+}
+
+func FindMineralById(mineralId int) (*Mineral, error) {
+	for _, value := range minerals {
+		if mineralId == value.ID {
+			return &value, nil
+		}
 	}
-
-	m.State = MINERAL_STATE_LIQUID
-	return nil
+	return nil, errors.New("mineral not available")
 }
 
-// this action would attempt to solidify a Mineral and turn it to Solid state
-func (m *Mineral) Condense () error {
-	return nil
+func IsActionTypeValid(actionType string) bool {
+	if actionType == MINERAL_ACTION_TYPE_CONDENSE ||
+		actionType == MINERAL_ACTION_TYPE_FRACTURE ||
+		actionType == MINERAL_ACTION_TYPE_MELT {
+		return true
+	}
+	return false
 }
