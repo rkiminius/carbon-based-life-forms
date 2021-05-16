@@ -1,12 +1,16 @@
 package mineral
 
-import "errors"
+import (
+	"errors"
+	"go.mongodb.org/mongo-driver/bson/primitive"
+)
 
 type MineralType struct {
-	Name          string
-	Hardness      int
-	MeltingPoint  float64
-	FractureLimit int
+	ID            primitive.ObjectID `json:"id" bson:"_id"`
+	Name          string             `json:"name" bson:"name"`
+	Hardness      int                `json:"hardness" bson:"hardness"`
+	MeltingPoint  float64            `json:"meltingPoint" bson:"meltingPoint"`
+	FractureLimit int                `json:"fractureLimit" bson:"fractureLimit"`
 }
 
 var mineralTypes = []MineralType{

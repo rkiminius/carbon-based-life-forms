@@ -1,0 +1,8 @@
+clientPort: :1323
+managerPort: :1324
+logPath: carbon.log
+mongoDb:
+  driverName: mongodb
+  host: localhost
+  port: 27017
+  dbName: carbon-based

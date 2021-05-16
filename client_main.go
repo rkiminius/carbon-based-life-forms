@@ -4,9 +4,14 @@ import (
 	"encoding/json"
 	"github.com/labstack/echo"
 	"github.com/rkiminius/carbon-based-life-forms/client"
+	"github.com/rkiminius/carbon-based-life-forms/config"
 	"github.com/rkiminius/carbon-based-life-forms/manager"
 	"net/http"
 )
+
+func init() {
+	config.GetConfig("conf.yaml")
+}
 
 func main() {
 
@@ -38,5 +43,5 @@ func main() {
 		return c.String(http.StatusOK, "order placed successfully")
 	})
 
-	e.Logger.Fatal(e.Start(":1323"))
+	e.Logger.Fatal(e.Start(config.Conf.ClientPort))
 }
