@@ -1,0 +1,20 @@
+[
+  {
+    "_id": {
+      "$oid": "5bd0e70b9db9ea0011519bd0"
+    },
+    "name":          "topaz",
+    "hardness":       200,
+    "meltingPoint":   1000,
+    "fractureLimit": 32
+  },
+  {
+    "_id": {
+      "$oid": "5bd0e70b9db9ea0011519bd1"
+    },
+    "name":          "diamond",
+    "hardness":       1500,
+    "meltingPoint":   5000,
+    "fractureLimit": 8
+  }
+]

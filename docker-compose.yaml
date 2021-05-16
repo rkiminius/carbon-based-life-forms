@@ -12,6 +12,17 @@ services:
     networks:
       - rabbitmq_go_net
 
+  mongodb:
+    container_name: carbon-mongo
+    image: mongo
+    ports:
+      - "27017:27017"
+
+  mongo-seed:
+    build: ./mongo-seed
+    links:
+      - mongodb
+
 networks:
   rabbitmq_go_net:
     driver: bridge
