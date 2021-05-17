@@ -16,7 +16,7 @@ type ClientRequest struct {
 func PerformActionsOnMinerals(cr ClientRequest) error {
 
 	clientMsg := rabbit.Message{
-		Type:       "ORDER",
+		Type:       rabbit.MSG_TYPE_ORDER,
 		ActionType: cr.Action,
 		MineralID:  cr.MineralID,
 	}

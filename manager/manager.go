@@ -23,7 +23,7 @@ func CreateTaskAndSendToFactory(actionType mineral.ActionType, mineralID primiti
 	}
 
 	msgToFactory := rabbit.Message{
-		Type:   "ACTION",
+		Type:   rabbit.MSG_TYPE_PERFORM_ACTION,
 		TaskID: newTask.ID,
 	}
 

@@ -69,8 +69,14 @@ func condense(m mineral.Mineral) {
 }
 
 func informManager(taskRequest task.Task) {
-	sm := rabbit.SimpleMessage{
-		fmt.Sprintf("Action %s done!\n", taskRequest.ActionType),
+	sm := rabbit.Message{
+		Type: rabbit.MSG_TYPE_INFO_FROM_FACTORY,
+		Data: fmt.Sprintf(
+			"|FROM FACTORY|: Task: %s; Task Status: %s; Action: %s;",
+			taskRequest.ID.Hex(),
+			taskRequest.State,
+			taskRequest.ActionType,
+		),
 	}
 	b, err := json.Marshal(&sm)
 	if err != nil {

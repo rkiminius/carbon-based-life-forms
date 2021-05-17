@@ -22,10 +22,15 @@ func handleFromClient(body []byte) {
 	var message rabbit.Message
 	_ = json.Unmarshal(body, &message)
 	switch message.Type {
-	case "ORDER":
+	case rabbit.MSG_TYPE_ORDER:
+		log.Printf("|FROM CLIENT - New order| MineralID: %s; Action: %s;", message.MineralID.Hex(), message.ActionType)
 		err := CreateTaskAndSendToFactory(message.ActionType, message.MineralID)
 		if err != nil {
 			log.Fatal(err)
 		}
+		break
+	case rabbit.MSG_TYPE_INFO_FROM_FACTORY:
+		log.Println(message.Data)
+		break
 	}
 }

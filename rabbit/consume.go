@@ -33,7 +33,7 @@ func (conn Conn) StartConsumer(queueName string, handler func(body []byte)) {
 
 	go func() {
 		for d := range msgs {
-			log.Printf("Received a message: %s", d.Body)
+			//log.Printf("Received a message: %s", d.Body)
 			handler(d.Body)
 		}
 	}()

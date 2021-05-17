@@ -5,6 +5,12 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
+const (
+	MSG_TYPE_ORDER             = "ORDER"
+	MSG_TYPE_PERFORM_ACTION    = "PERFORM_ACTION"
+	MSG_TYPE_INFO_FROM_FACTORY = "INFO_FROM_FACTORY"
+)
+
 type Message struct {
 	Type       string             `json:"type"`
 	ActionType mineral.ActionType `json:"actionType"`

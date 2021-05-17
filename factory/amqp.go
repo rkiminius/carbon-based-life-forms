@@ -26,7 +26,8 @@ func handlerFunc(body []byte) {
 		log.Fatal(err)
 	}
 	switch message.Type {
-	case "ACTION":
+	case rabbit.MSG_TYPE_PERFORM_ACTION:
+		log.Printf("|FROM MANAGER - New Task | TaskID: %s;", message.TaskID.Hex())
 		taskFromDB, err := task.GetById(message.TaskID)
 		if err != nil {
 			log.Fatal(err)
