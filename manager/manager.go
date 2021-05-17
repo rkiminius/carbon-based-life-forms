@@ -32,6 +32,6 @@ func SendTaskToFactory(factoryTask task.Task) error {
 	return nil
 }
 
-func GetAvailableMinerals() ([]mineral.Mineral, error) {
-	return mineral.GetMinerals(), nil
+func GetAvailableMinerals() ([]*mineral.Mineral, error) {
+	return mineral.GetMineralList()
 }

@@ -53,12 +53,12 @@ func insertMineralType(mineralType *MineralType) (*MineralType, error) {
 		return nil, err
 	}
 
-	userFromDb, err := getByMineralTypeId(result.InsertedID.(primitive.ObjectID))
+	mineralTypeFromDb, err := getByMineralTypeId(result.InsertedID.(primitive.ObjectID))
 	if err != nil {
 		return nil, err
 	}
 
-	return userFromDb, nil
+	return mineralTypeFromDb, nil
 }
 
 func getByMineralTypeId(id primitive.ObjectID) (*MineralType, error) {

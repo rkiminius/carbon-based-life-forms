@@ -1,0 +1,20 @@
+[
+  {
+    "_id": {
+      "$oid": "5bd0e70b9db9ea0011519bd5"
+    },
+    "uuid": "a24b3f9a-b702-11eb-8529-0242ac130003",
+    "name": "topaz",
+    "state": "LIQUID",
+    "fractures": 10
+  },
+  {
+    "_id": {
+      "$oid": "5bd0e70b9db9ea0011519bd9"
+    },
+    "uuid": "af495394-b702-11eb-8529-0242ac130003",
+    "name": "diamond",
+    "state": "SOLID",
+    "fractures": 4
+  }
+]

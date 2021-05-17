@@ -6,6 +6,7 @@ import (
 	"github.com/rkiminius/carbon-based-life-forms/mineral"
 	"github.com/rkiminius/carbon-based-life-forms/rabbit"
 	"github.com/rkiminius/carbon-based-life-forms/task"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 type Client struct {
@@ -14,12 +15,12 @@ type Client struct {
 }
 
 type ClientRequest struct {
-	MineralID int                `json:"mineralId"`
+	MineralID primitive.ObjectID `json:"mineralId"`
 	Action    mineral.ActionType `json:"action"`
 }
 
 // Clients must be able to ask Manager about their Minerals
-func (c Client) AskMinerals() ([]mineral.Mineral, error) {
+func (c Client) AskMinerals() ([]*mineral.Mineral, error) {
 
 	//var man manager.Manager
 	minerals, err := manager.GetAvailableMinerals()
@@ -43,7 +44,7 @@ func (c Client) PerformActionsOnMinerals(minerals []mineral.Mineral) error {
 }
 
 func PerformActionsOnMinerals(cr ClientRequest) error {
-	m, err := mineral.FindMineralById(cr.MineralID)
+	m, err := mineral.GetMineralById(cr.MineralID)
 	if err != nil {
 		return err
 	}
