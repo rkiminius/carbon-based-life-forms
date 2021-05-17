@@ -76,6 +76,17 @@ func getById(id primitive.ObjectID) (*Task, error) {
 	return &task, nil
 }
 
+func UpdateState(taskID primitive.ObjectID, state string) (*mongo.UpdateResult, error) {
+	ctx, _ := db.GetTimeoutContext()
+	filter := bson.M{"_id": taskID}
+	update := bson.M{
+		"$set": bson.M{
+			"state": state,
+		},
+	}
+	return getCollection().UpdateOne(ctx, filter, update)
+}
+
 func GetById(id primitive.ObjectID) (*Task, error) {
 	return getById(id)
 }
