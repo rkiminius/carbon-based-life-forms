@@ -33,7 +33,7 @@ func PerformActions(taskRequest task.Task) {
 // this action would split the Mineral in half, doubling its current amount of fractures
 func fracture(m mineral.Mineral) (mineral.Mineral, error) {
 	timeToProcess := 10 * time.Second
-	mt, err := mineral.FindMineralTypeByName(m.Name)
+	mt, err := mineral.GetMineralTypeByName(m.Name)
 	if err != nil {
 		log.Fatal(err.Error())
 	}
