@@ -12,6 +12,4 @@ func InitAmqp() {
 	if err != nil {
 		panic(err)
 	}
-
-	//conn.Publish("client-manager-queue", []byte(`{"message":"test"}`))
 }

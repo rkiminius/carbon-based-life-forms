@@ -2,10 +2,10 @@ package mineral
 
 import (
 	"github.com/rkiminius/carbon-based-life-forms/db"
+	log "github.com/sirupsen/logrus"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
-	"log"
 )
 
 // State of Mineral

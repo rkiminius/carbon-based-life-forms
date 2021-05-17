@@ -3,7 +3,7 @@ package manager
 import (
 	"encoding/json"
 	"github.com/rkiminius/carbon-based-life-forms/rabbit"
-	"log"
+	log "github.com/sirupsen/logrus"
 )
 
 var conn rabbit.Conn

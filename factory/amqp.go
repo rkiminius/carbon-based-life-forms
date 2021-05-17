@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"github.com/rkiminius/carbon-based-life-forms/rabbit"
 	"github.com/rkiminius/carbon-based-life-forms/task"
-	"log"
+	log "github.com/sirupsen/logrus"
 )
 
 var conn rabbit.Conn

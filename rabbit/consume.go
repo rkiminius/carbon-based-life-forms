@@ -2,7 +2,7 @@ package rabbit
 
 import (
 	"github.com/rkiminius/carbon-based-life-forms/helper"
-	"log"
+	log "github.com/sirupsen/logrus"
 )
 
 // StartConsumer -

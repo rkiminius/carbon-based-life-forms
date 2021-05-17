@@ -1,7 +1,7 @@
 package helper
 
 import (
-	"log"
+	log "github.com/sirupsen/logrus"
 )
 
 // Here we set the way error messages are displayed in the terminal.
