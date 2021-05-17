@@ -3,7 +3,6 @@ package manager
 import (
 	"encoding/json"
 	"github.com/rkiminius/carbon-based-life-forms/rabbit"
-	"github.com/rkiminius/carbon-based-life-forms/task"
 	"log"
 )
 
@@ -24,10 +23,9 @@ func handleFromClient(body []byte) {
 	_ = json.Unmarshal(body, &message)
 	switch message.Type {
 	case "ORDER":
-		factoryTask, err := task.TaskFromInterface(message.Data)
+		err := CreateTaskAndSendToFactory(message.ActionType, message.MineralID)
 		if err != nil {
 			log.Fatal(err)
 		}
-		SendTaskToFactory(*factoryTask)
 	}
 }

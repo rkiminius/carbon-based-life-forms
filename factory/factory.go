@@ -2,7 +2,6 @@ package factory
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"github.com/rkiminius/carbon-based-life-forms/mineral"
 	"github.com/rkiminius/carbon-based-life-forms/rabbit"
@@ -12,17 +11,24 @@ import (
 )
 
 func PerformActions(taskRequest task.Task) {
+
+	mineralFromTask, err := mineral.GetMineralById(taskRequest.MineralID)
+	if err != nil {
+		log.Fatal(err)
+		return
+	}
+
 	switch taskRequest.ActionType {
 	case mineral.MINERAL_ACTION_TYPE_FRACTURE:
-		fracture(taskRequest.Mineral)
+		fracture(*mineralFromTask)
 		informManager(taskRequest)
 		break
 	case mineral.MINERAL_ACTION_TYPE_MELT:
-		melt(taskRequest.Mineral)
+		melt(*mineralFromTask)
 		informManager(taskRequest)
 		break
 	case mineral.MINERAL_ACTION_TYPE_CONDENSE:
-		condense(taskRequest.Mineral)
+		condense(*mineralFromTask)
 		informManager(taskRequest)
 		break
 	default:
@@ -31,7 +37,7 @@ func PerformActions(taskRequest task.Task) {
 }
 
 // this action would split the Mineral in half, doubling its current amount of fractures
-func fracture(m mineral.Mineral) (mineral.Mineral, error) {
+func fracture(m mineral.Mineral) {
 	timeToProcess := 10 * time.Second
 	mt, err := mineral.GetMineralTypeByName(m.Name)
 	if err != nil {
@@ -45,23 +51,21 @@ func fracture(m mineral.Mineral) (mineral.Mineral, error) {
 
 	time.Sleep(timeToProcess)
 	m.Fractures = fractures
-	return m, nil
 }
 
 // this action would attempt to melt a Mineral and turn it to Liquid state
-func melt(m mineral.Mineral) (mineral.Mineral, error) {
+func melt(m mineral.Mineral) {
 	if m.State == mineral.MINERAL_STATE_LIQUID {
-		return m, errors.New("Mineral state already in liquid stage")
+		log.Fatal("Mineral state already in liquid stage")
+
 	}
 
 	m.State = mineral.MINERAL_STATE_LIQUID
-	return m, nil
 }
 
 // this action would attempt to solidify a Mineral and turn it to Solid state
-func condense(m mineral.Mineral) (mineral.Mineral, error) {
+func condense(m mineral.Mineral) {
 	m.State = mineral.MINERAL_STATE_SOLID
-	return m, nil
 }
 
 func informManager(taskRequest task.Task) {
@@ -72,6 +76,5 @@ func informManager(taskRequest task.Task) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	//helper.FailOnError(err, err.Error())
 	conn.Publish("manager-queue", b)
 }

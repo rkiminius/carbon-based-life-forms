@@ -21,13 +21,16 @@ func InitAmqp() {
 
 func handlerFunc(body []byte) {
 	var message rabbit.Message
-	_ = json.Unmarshal(body, &message)
+	err := json.Unmarshal(body, &message)
+	if err != nil {
+		log.Fatal(err)
+	}
 	switch message.Type {
 	case "ACTION":
-		factoryTask, err := task.TaskFromInterface(message.Data)
+		taskFromDB, err := task.GetById(message.TaskID)
 		if err != nil {
 			log.Fatal(err)
 		}
-		PerformActions(*factoryTask)
+		PerformActions(*taskFromDB)
 	}
 }

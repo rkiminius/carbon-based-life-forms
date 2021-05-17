@@ -5,26 +5,29 @@ import (
 	"github.com/rkiminius/carbon-based-life-forms/mineral"
 	"github.com/rkiminius/carbon-based-life-forms/rabbit"
 	"github.com/rkiminius/carbon-based-life-forms/task"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-type Manager struct {
-	Name string
-}
-
-func (m Manager) PerformActions(minerals []mineral.Mineral) error {
-	return nil
-}
-
 // Manager must be able to send a task request to the Factory
-func SendTaskToFactory(factoryTask task.Task) error {
-	//factory.PerformActions(factoryTask)
+func CreateTaskAndSendToFactory(actionType mineral.ActionType, mineralID primitive.ObjectID) error {
 
-	msg := rabbit.Message{
-		"ACTION",
-		factoryTask,
+	taskObj := task.Task{
+		MineralID:  mineralID,
+		State:      task.TASK_STATE_WAITING,
+		ActionType: actionType,
 	}
 
-	b, err := json.Marshal(&msg)
+	newTask, err := task.New(&taskObj)
+	if err != nil {
+		return err
+	}
+
+	msgToFactory := rabbit.Message{
+		Type:   "ACTION",
+		TaskID: newTask.ID,
+	}
+
+	b, err := json.Marshal(&msgToFactory)
 	if err != nil {
 		return err
 	}
