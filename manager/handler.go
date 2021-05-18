@@ -4,7 +4,9 @@ import (
 	"encoding/json"
 	"github.com/labstack/echo"
 	"github.com/rkiminius/carbon-based-life-forms/mineral"
+	"github.com/rkiminius/carbon-based-life-forms/task"
 	log "github.com/sirupsen/logrus"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"net/http"
 	"strings"
 )
@@ -13,6 +15,8 @@ func InitRouter(group *echo.Group) {
 	group.GET("/mineralType/all", getAllMineralTypes)
 	group.POST("/mineralType/new", postMineralType)
 	group.DELETE("/mineralType/:id", deleteMineralType)
+	group.GET("/task", getAllTasks)
+	group.GET("/task/:taskId", getTask)
 }
 
 func getAllMineralTypes(c echo.Context) error {
@@ -54,4 +58,33 @@ func deleteMineralType(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, deleted > 0)
+}
+
+func getAllTasks(c echo.Context) error {
+
+	tasks, err := task.GetList()
+	if err != nil {
+		log.Error(err)
+		return echo.NewHTTPError(http.StatusInternalServerError, "error on data retrieval.")
+	}
+
+	return c.JSON(http.StatusOK, tasks)
+}
+
+func getTask(c echo.Context) error {
+
+	taskID := c.Param("taskId")
+
+	objId, err := primitive.ObjectIDFromHex(taskID)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusInternalServerError, "error on data retrieval.")
+	}
+
+	taskFromDb, err := task.GetById(objId)
+	if err != nil {
+		log.Error(err)
+		return echo.NewHTTPError(http.StatusInternalServerError, err)
+	}
+
+	return c.JSON(http.StatusOK, taskFromDb)
 }

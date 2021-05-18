@@ -37,6 +37,10 @@ func getList() ([]*Task, error) {
 	return tasksList, nil
 }
 
+func GetList() ([]*Task, error) {
+	return getList()
+}
+
 func insertTask(task *Task) (*Task, error) {
 	ctx, _ := db.GetTimeoutContext()
 
