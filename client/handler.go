@@ -9,11 +9,24 @@ import (
 
 func InitRouter(group *echo.Group) {
 	group.GET("/minerals", askMineralsHandler)
+	group.GET("/minerals/:uuid", askMyMineralsHandler)
 	group.POST("/order", orderActionOnMineralHandler)
 }
 
 func askMineralsHandler(c echo.Context) error {
-	minerals, _ := manager.GetAvailableMinerals()
+	minerals, err := manager.GetAvailableMinerals()
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "invalid request!")
+	}
+	return c.JSON(http.StatusOK, minerals)
+}
+
+func askMyMineralsHandler(c echo.Context) error {
+	uuid := c.Param("uuid")
+	minerals, err := manager.GetAvailableMineralsByUser(uuid)
+	if err != nil {
+		return echo.NewHTTPError(http.StatusBadRequest, "invalid request!")
+	}
 	return c.JSON(http.StatusOK, minerals)
 }
 

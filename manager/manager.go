@@ -38,3 +38,7 @@ func CreateTaskAndSendToFactory(actionType mineral.ActionType, mineralID primiti
 func GetAvailableMinerals() ([]*mineral.Mineral, error) {
 	return mineral.GetMineralList()
 }
+
+func GetAvailableMineralsByUser(uuid string) ([]*mineral.Mineral, error) {
+	return mineral.GetMineralsByUUID(uuid)
+}

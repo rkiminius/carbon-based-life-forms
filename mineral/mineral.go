@@ -27,24 +27,7 @@ type minerals []*Mineral
 
 func getMineralList() ([]*Mineral, error) {
 	filter := bson.M{}
-	ctx, _ := db.GetTimeoutContext()
-
-	var mineralsList minerals
-	mineralsList = make([]*Mineral, 0)
-	result, err := getMineralCollection().Find(ctx, filter)
-	if err != nil {
-		return nil, err
-	}
-
-	for result.Next(ctx) {
-		var m Mineral
-		if err := result.Decode(&m); err != nil {
-			log.Fatal(err)
-		}
-		mineralsList = append(mineralsList, &m)
-	}
-
-	return mineralsList, nil
+	return getMineralsByFilter(filter)
 }
 
 func InsertMineral(mineral *Mineral) (*Mineral, error) {
@@ -88,6 +71,32 @@ func getMineralById(id primitive.ObjectID) (*Mineral, error) {
 
 func GetMineralById(id primitive.ObjectID) (*Mineral, error) {
 	return getMineralById(id)
+}
+
+func getMineralsByFilter(filter bson.M) ([]*Mineral, error) {
+	ctx, _ := db.GetTimeoutContext()
+
+	var mineralsList minerals
+	mineralsList = make([]*Mineral, 0)
+	result, err := getMineralCollection().Find(ctx, filter)
+	if err != nil {
+		return nil, err
+	}
+
+	for result.Next(ctx) {
+		var m Mineral
+		if err := result.Decode(&m); err != nil {
+			log.Fatal(err)
+		}
+		mineralsList = append(mineralsList, &m)
+	}
+
+	return mineralsList, nil
+}
+
+func GetMineralsByUUID(uuid string) ([]*Mineral, error) {
+	filter := bson.M{"uuid": uuid}
+	return getMineralsByFilter(filter)
 }
 
 func GetMineralList() ([]*Mineral, error) {
