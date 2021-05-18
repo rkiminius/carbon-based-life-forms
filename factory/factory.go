@@ -37,10 +37,12 @@ func PerformActions(taskRequest task.Task) {
 // this action would split the Mineral in half, doubling its current amount of fractures
 func fracture(m mineral.Mineral, t task.Task) {
 	updateTaskAndInform(t.ID, task.TASK_STATE_PROCESSING)
+
 	timeToProcess := 8 * time.Second
 	mt, err := mineral.GetMineralTypeByName(m.Name)
 	if err != nil {
-		log.Fatal(err.Error())
+		updateTaskAndInformError(t.ID, task.TASK_STATE_REJECTED, err.Error())
+		return
 	}
 
 	fractures := m.Fractures * 2
@@ -51,31 +53,53 @@ func fracture(m mineral.Mineral, t task.Task) {
 
 	time.Sleep(timeToProcess)
 	m.Fractures = fractures
+	m.State = mineral.MINERAL_STATE_FRACTURED
+
+	err = updateMineral(m)
+	if err != nil {
+		updateTaskAndInformError(t.ID, task.TASK_STATE_REJECTED, err.Error())
+		return
+	}
+
 	updateTaskAndInform(t.ID, task.TASK_STATE_DONE)
 }
 
 // this action would attempt to melt a Mineral and turn it to Liquid state
 func melt(m mineral.Mineral, t task.Task) {
 	updateTaskAndInform(t.ID, task.TASK_STATE_PROCESSING)
+
 	timeToProcess := 6 * time.Second
 	if m.State == mineral.MINERAL_STATE_LIQUID {
-		//log.Println("Mineral state already in liquid stage")
-		updateTaskAndInformError(t.ID, task.TASK_STATE_REJECTED, "Mineral state already in liquid stage")
+		updateTaskAndInformError(t.ID, task.TASK_STATE_REJECTED, "Mineral already in liquid stage")
 		return
 	}
 
 	time.Sleep(timeToProcess)
-
 	m.State = mineral.MINERAL_STATE_LIQUID
+
+	err := updateMineral(m)
+	if err != nil {
+		updateTaskAndInformError(t.ID, task.TASK_STATE_REJECTED, err.Error())
+		return
+	}
+
 	updateTaskAndInform(t.ID, task.TASK_STATE_DONE)
 }
 
 // this action would attempt to solidify a Mineral and turn it to Solid state
 func condense(m mineral.Mineral, t task.Task) {
 	updateTaskAndInform(t.ID, task.TASK_STATE_PROCESSING)
+
 	timeToProcess := 10 * time.Second
 	time.Sleep(timeToProcess)
 	m.State = mineral.MINERAL_STATE_SOLID
+
+	err := updateMineral(m)
+	if err != nil {
+		updateTaskAndInformError(t.ID, task.TASK_STATE_REJECTED, err.Error())
+		return
+	}
+
 	updateTaskAndInform(t.ID, task.TASK_STATE_DONE)
 }
 
@@ -111,7 +135,10 @@ func informManager(msg string) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	conn.Publish("manager-queue", b)
+	err = conn.Publish("manager-queue", b)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 func updateTaskStatus(taskID primitive.ObjectID, tStatus string) *task.Task {
@@ -124,4 +151,12 @@ func updateTaskStatus(taskID primitive.ObjectID, tStatus string) *task.Task {
 		log.Fatal(err)
 	}
 	return updatedTask
+}
+
+func updateMineral(m mineral.Mineral) error {
+	_, err := mineral.UpdateMineral(m)
+	if err != nil {
+		return err
+	}
+	return nil
 }

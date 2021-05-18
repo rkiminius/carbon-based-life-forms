@@ -99,6 +99,18 @@ func GetMineralsByUUID(uuid string) ([]*Mineral, error) {
 	return getMineralsByFilter(filter)
 }
 
+func UpdateMineral(mineral Mineral) (*mongo.UpdateResult, error) {
+	ctx, _ := db.GetTimeoutContext()
+	filter := bson.M{"_id": mineral.ID}
+	update := bson.M{
+		"$set": bson.M{
+			"state":     mineral.State,
+			"fractures": mineral.Fractures,
+		},
+	}
+	return getMineralCollection().UpdateOne(ctx, filter, update)
+}
+
 func GetMineralList() ([]*Mineral, error) {
 	return getMineralList()
 }
