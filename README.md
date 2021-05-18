@@ -8,7 +8,7 @@ In Docker approach run:
 docker-compose up -d
 ```
 
-Client, Manager and Factory is separated applications that use amqp and http protocols. 
+Client, Manager and Factory is separated applications that use AMQP and HTTP protocols. 
 
 ### Client
 To start client run: 
@@ -47,8 +47,15 @@ POST: localhost:1324/manager/mineralType/new
 
 Remove mineral type by id
 DELETE: localhost:1324/manager/mineralType/{mineral_type_id}
+
+Find task by id
+GET: localhost:1324/manager/task/{task_id}
+
+Get all tasks
+GET: localhost:1324/manager/task
 ```
 
+### Factory
 
 To start factory run:
 ```
